@@ -17,13 +17,7 @@ This Python script is designed to load futures market data from a CSV file and i
   - psycopg2
   - numpy
 
-## Installation
 
-1. Clone the repository
-```bash
-git clone <your-repository-url>
-cd <repository-directory>
-```
 
 2. Install required dependencies
 ```bash
@@ -95,18 +89,3 @@ The script provides console output tracking:
 - Data validation results
 - Insertion progress
 - Completion status
-
-## Customization
-Adjust `batch_size` in `insert_data()` function to optimize performance based on your system resources.
-
-## Potential Improvements
-- Add command-line argument support for input file
-- Implement more sophisticated data validation
-- Add logging to file
-- Create configuration file for database connection
-
-## License
-[Add your license information]
-
-## Contributing
-[Add contribution guidelines]
