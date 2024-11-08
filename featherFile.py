@@ -9,7 +9,7 @@ from datetime import datetime
 import numpy as np
 
 
-CONNECTION = 'postgres://tsdbadmin:odwkmipgaq1b34s2@i9jqhhswdl.l9ey76f5h9.tsdb.cloud.timescale.com:39127/tsdb?sslmode=require'
+CONNECTION = 'postgres://tsdbadmin:l3bvoa326wbbkroo@i9jqhhswdl.l9ey76f5h9.tsdb.cloud.timescale.com:39127/tsdb?sslmode=require'
 
 def create_connection():
     return psycopg2.connect(CONNECTION)
@@ -30,6 +30,7 @@ def create_table(conn):
             high FLOAT,
             low FLOAT,
             name TEXT NOT NULL,
+            close FLOAT,
             expiry DATE NOT NULL,
             strike FLOAT,
             instrument_type TEXT NOT NULL,
@@ -57,7 +58,7 @@ def create_table(conn):
 def validate_data(df):
     """Validate and clean the dataframe"""
     
-    required_columns = ['date', 'name', 'expiry', 'instrument_type', 'open', 'high', 'low']
+    required_columns = ['date', 'name', 'expiry', 'instrument_type', 'open', 'high', 'low','close']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         raise ValueError(f"Missing required columns: {missing_columns}")
@@ -106,7 +107,7 @@ def insert_data(conn, df, batch_size=5000):
         df['time'] = datetime.now()
         
         
-        columns = ['time', 'date', 'open', 'high', 'low', 'name', 
+        columns = ['time', 'date', 'open', 'high','close', 'low', 'name', 
                   'expiry', 'strike', 'instrument_type', 'tradingsymbol']
         
         
@@ -123,7 +124,7 @@ def insert_data(conn, df, batch_size=5000):
                     cursor,
                     """
                     INSERT INTO futures_data (
-                        time, date, open, high, low, name, expiry, 
+                        time, date, open, high,close, low, name, expiry, 
                         strike, instrument_type, tradingsymbol
                     ) VALUES %s;
                     """,
